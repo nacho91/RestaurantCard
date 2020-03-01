@@ -9,11 +9,11 @@ import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
-class RestaurantCardApiTest {
+class RestaurantCardApiManagerTest {
 
     private val mockWebServer = MockWebServer()
 
-    private lateinit var restaurantCardApi: RestaurantCardApi
+    private lateinit var restaurantCardApiManager: RestaurantCardApiManager
 
     @Before
     fun setup() {
@@ -21,8 +21,9 @@ class RestaurantCardApiTest {
 
         val url = mockWebServer.url("/").toString()
 
-        restaurantCardApi = RetrofitApiClient(url, 60L, false)
-            .createService(RestaurantCardApi::class.java)
+        val apiClient = RetrofitApiClient(url, 60L, false)
+
+        restaurantCardApiManager = RestaurantCardApiManager(apiClient, "test-key")
     }
 
     @After
@@ -40,20 +41,14 @@ class RestaurantCardApiTest {
 
         mockWebServer.enqueue(response)
 
-        val queries = mutableMapOf(
-            Pair("key", "test-key"),
-            Pair("method", "test-method"),
-            Pair("id_restaurant", "test-id")
-        )
-
         //act
-        val methodResponse = restaurantCardApi.getMethod(queries).blockingGet()
+        val methodResponse = restaurantCardApiManager.getRestaurantInfo("test-id").blockingGet()
 
         //assert
         val request = mockWebServer.takeRequest()
 
         assertEquals("GET", request.method)
-        assertEquals("/?key=test-key&method=test-method&id_restaurant=test-id", request.path)
+        assertEquals("/?key=test-key&method=restaurant_get_info&id_restaurant=test-id", request.path)
 
         assertNotNull(methodResponse.data)
     }
