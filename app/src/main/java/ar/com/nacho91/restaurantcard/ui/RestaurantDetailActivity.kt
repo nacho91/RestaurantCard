@@ -40,7 +40,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
 
     private fun setupRestaurant(restaurant: Restaurant) {
         name.text = restaurant.name
-        photosPager.adapter = RestaurantPhotosPagerAdapter()
+        photosPager.adapter = RestaurantPhotosPagerAdapter(restaurant.photos)
         photosIndicator.setViewPager(photosPager)
     }
 

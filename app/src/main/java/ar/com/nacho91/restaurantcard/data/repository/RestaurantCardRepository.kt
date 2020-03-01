@@ -9,7 +9,7 @@ class RestaurantCardRepository(private val apiManager: RestaurantCardApiManager)
     fun getRestaurantInfo(restaurantId: String): Single<Restaurant> {
         return apiManager.getRestaurantInfo(restaurantId).map { response ->
             val data = response.data
-            return@map Restaurant(data.idRestaurant, data.name)
+            return@map Restaurant(data.idRestaurant, data.name, data.pics.map { it.url })
         }
     }
 }
