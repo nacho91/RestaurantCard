@@ -7,7 +7,7 @@ import retrofit2.http.QueryMap
 
 interface RestaurantCardApi {
 
-    @GET("/")
+    @GET("api")
     fun getMethod(@QueryMap values: Map<String, String>): Single<MethodResponse>
 
 }
